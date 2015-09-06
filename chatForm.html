@@ -1,0 +1,76 @@
+<!--comit 1-->
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+
+<title>HTTP Chat Room</title>
+</head>
+
+<body>
+
+<p align="center"><font size="6">HTTP Chat Room</font></p>
+<form>
+	<!--webbot bot="SaveResults" U-File="../_private/form_results.csv" S-Format="TEXT/CSV" S-Label-Fields="TRUE" startspan --><input TYPE="hidden" NAME="VTI-GROUP" VALUE="0"><!--webbot bot="SaveResults" i-checksum="43374" endspan -->
+	
+	<p align= "center"> <input id="chat_name" size="30" name="cName"><br>
+	<b><font size="5">Chat Name</font></b></p><p align="center">
+	
+	<div id="chat_content" style="width:50%; height:500px ;border:1px solid black; margin:0 auto"></div><br>
+	<b><font size="5">Current Room Contents</font></b></p>
+	</p>
+	
+	<p	align="center"><textarea id="message" rows="3" name="S2" cols="100"></textarea><br>
+	<b><font size="5">Send Contents 2</font></b></p>
+	
+	<p	align="center">&nbsp;</p>
+
+	
+	<p align="center">
+	
+	<input id="submit" type="button" value="Submit" name="B3">
+	
+	<input type="reset" value="Reset" name="B4"></p>
+</form>
+<script>
+
+
+
+
+$(document).on('click', '#submit', function(e)
+{
+	var line = $('#message').val();
+	var name = $('#chat_name').val();
+
+	if ( $("#message").val().trim().len < 1) return;
+	$("#message").val("");
+	$.get( "/CHAT?name="+name+"&line="+line+"", function(resp ) 
+	{
+		var value = decodeURI(resp);
+		$( "#chat_content" ).html( value );
+	},  
+	"html");
+	
+}
+
+);
+
+function updateMessages(){
+	console.log('i was called updateMessages');
+	$.get( "/HISTORY", function(resp) 
+	{
+		var value = decodeURI(resp);
+		$( "#chat_content" ).html(value) ;
+	},"html");
+
+} 
+
+setInterval(updateMessages, 2000);
+
+
+
+</script>
+</body>
+</html>
